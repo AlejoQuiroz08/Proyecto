@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  web1:
+    build: ./webapp
+    environment:
+      DB_HOST: mysql_master
+      DB_NAME: appdb
+      DB_USER: user
+      DB_PASS: password
+    networks:
+      - backend
+
+  web2:
+    build: ./webapp
+    environment:
+      DB_HOST: mysql_master
+      DB_NAME: appdb
+      DB_USER: user
+      DB_PASS: password
+    networks:
+      - backend
+
+  web3:
+    build: ./webapp
+    environment:
+      DB_HOST: mysql_master
+      DB_NAME: appdb
+      DB_USER: user
+      DB_PASS: password
+    networks:
+      - backend
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web1
+      - web2
+      - web3
+    networks:
+      - backend
+
+  mysql_master:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_master_data:/var/lib/mysql
+      - ./mysql/master/conf.d:/etc/mysql/conf.d
+      - ./mysql/master/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend
+
+  mysql_slave:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - mysql_slave_data:/var/lib/mysql
+      - ./mysql/slave/conf.d:/etc/mysql/conf.d
+      - ./mysql/slave/entrypoint.sh:/entrypoint.sh
+    command: bash /entrypoint.sh
+    depends_on:
+      - mysql_master
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql_master
+    depends_on:
+      - mysql_master
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  mysql_master_data:
+  mysql_slave_data:
