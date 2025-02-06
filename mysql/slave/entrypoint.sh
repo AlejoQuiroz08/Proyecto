@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/local/bin/docker-entrypoint.sh mysqld &
+exec mysqld
 
 until mysqladmin -u root -prootpass ping; do
   sleep 1

@@ -27,8 +27,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $stmt->insert_id;
             $_SESSION['username'] = $username;
             header("Location: catalog.php");
+            exit;
         } else {
             header("Location: register.php?error=Error al registrar usuario");
+            exit;
         }
     } else {
         // Login de usuario
@@ -45,8 +47,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             header("Location: catalog.php");
+            exit;
         } else {
             header("Location: login.php?error=Credenciales incorrectas");
+            exit;
         }
     }
 }
