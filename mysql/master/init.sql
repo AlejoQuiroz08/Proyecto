@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS products (
     image_url VARCHAR(255)
 );
 
+--Pruebaaa
 -- Insertar algunos productos de ejemplo
 INSERT INTO products (name, description, price, image_url) VALUES
 ('Zapatillas Deportivas', 'Zapatillas para running ultraligeras', 89.99, 'https://example.com/shoes.jpg'),
